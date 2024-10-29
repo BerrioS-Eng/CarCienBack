@@ -1,50 +1,30 @@
-import appointmentModel from '../models/appointmentModel.js';
+import 'dotenv/config';
 
-class AppointmentController {
-    constructor(){
+import Appointment from '../models/appointmentModel.js';
 
-    }
+export async function getAll(req, res) {
+    const { page } = req.query;
+    const appointmentPerPage = 10;
 
-    async create(req, res) {
-        try {
-            const data = await appointmentModel.create(req.body);
-            res.status(201).json(data);
-        } catch (error) {
-            res.status(500).send(e);
+    try {
+        let pageNum = 0;
+        if (page <= 1) {
+            pageNum = 0
+        } else {
+            pageNum = page - 1;
         }
-    }
 
-    async update(req, res) {
-        try {
-            res.status(201).json({status: 'update-OK'});
-        } catch (error) {
-            res.status(500).send(e);
-        }
-    }
+        const result = await Appointment.find()
+                                            .sort({ createdAt: -1 })
+                                            .skip(pageNum * appointmentPerPage)
+                                            .limit(appointmentPerPage)
+                                            .populate({ path: "UserId", select: "email" });
 
-    async delete(req, res) {
-        try {
-            res.status(201).json({status: 'delete-OK'});
-        } catch (error) {
-            res.status(500).send(e);
-        }
-    }
+        res.status(200).json({ success: true, message: "Appointment", data: result });
 
-    async getAll(req, res) {
-        try {
-            res.status(201).json({status: 'getAll-OK'});
-        } catch (error) {
-            res.status(500).send(e);
-        }
-    }
+        
 
-    async getOne(req, res) {
-        try {
-            res.status(201).json({status: 'getOne-OK'});
-        } catch (error) {
-            res.status(500).send(e);
-        }
+    } catch (error) {
+        console.log(error);
     }
 }
-
-export default new AppointmentController();

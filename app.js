@@ -6,8 +6,8 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 
-//import routesAppointment from './routes/appointment.js';
 import authRoutes from './routes/authRouter.js';
+import appointmentRoute from './routes/appointmentRouter.js';
 
 const app = express();
 
@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 //app.use('/app', routesAppointment);
 app.use('/api/auth', authRoutes);
+app.use('/api/appointment', appointmentRoute)
 //app.use('/appointment', routesAppointment);
 //app.use('/user', routesUser);
 //app.use('/product', routesProduct);
