@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import jwt from "jsonwebtoken";
 import { doHash, doHashValidation, hmacProcess } from "../helpers/hashing.js";
-import { acceptCodeSchema, signinSchema, signupSchema } from "../middlewares/validators.js";
+import { acceptCodeSchema, changePasswordSchema, signinSchema, signupSchema } from "../middlewares/validators.js";
 //const User = require("../models/userModel");
 import User from "../models/userModel.js"
 import transport from '../middlewares/sendMail.js';
@@ -198,6 +198,47 @@ export async function verifyVerificationCode(req, res) {
 
     } catch (error) {
         console.log(error)
+    }
+}
+
+export async function changePassword (req, res) {
+    const { userId, verified } = req.user;
+    const { oldPassword, newPassword } = req.body;
+    try {
+        const { error, value } = changePasswordSchema.validate({ oldPassword, newPassword });
+        if(error){
+            return res.status(401)
+                        .json({ success: false, message: error.details[0].message });
+        }
+        if(!verified){
+            return res.status(401)
+                        .json({ success: false, message: "You are not verified user!!"});
+        }
+        
+        const existingUser = await User.findOne({ _id: userId }).select("+password");
+
+        if (!existingUser) {
+            return res.status(401)
+                        .json({ success: false, message: "User does not exists!!"});
+        }
+
+        const result = await doHashValidation(oldPassword, existingUser.password);
+
+        if (!result) {
+            return res.status(401)
+                        .json({ success: false, message: "Invalid credentials!!"});
+        }
+
+        const hashedPassword = await doHash(newPassword, 12);
+        existingUser.password = hashedPassword;
+        await existingUser.save();
+
+        return res.status(401)
+                    .json({ success: true, message: "Password update!!"});
+        
+
+    } catch (error) {
+        console.log(error);
     }
 }
  

@@ -42,3 +42,10 @@ export const acceptCodeSchema = Joi.object({
             }),
     providedCode: Joi.number()
 })
+
+export const changePasswordSchema = Joi.object({
+    oldPassword: Joi.string()
+                        .required(),
+    newPassword: Joi.string()
+                        .required()
+})
