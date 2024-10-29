@@ -49,3 +49,14 @@ export const changePasswordSchema = Joi.object({
     newPassword: Joi.string()
                         .required()
 })
+
+export const createAppointmentSchema = Joi.object({
+    service: Joi.string()
+                    .required(),
+    detail: Joi.string()
+                    .required(),
+    appointmentDate: Joi.date()
+                            .required(),
+    userId: Joi.string()
+                    .required()
+})
