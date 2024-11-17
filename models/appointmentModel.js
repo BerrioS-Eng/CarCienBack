@@ -1,35 +1,37 @@
-//import dbClient from "../config/dbClient.js";
 import mongoose from "mongoose";
 
-const appointmentSchema = mongoose.Schema({
-    service:{
-        type: String,
-        required: [true, "Service is required!"],
-        trim: true, 
+const appointmentSchema = new mongoose.Schema(
+  {
+    nombre: {
+      type: String,
+      required: [true, "Nombre es requerido!"],
+      trim: true,
     },
-    detail:{
-        type: String,
-        required: [true, "Description is required!"],
-        trim: true,
+    correo: {
+      type: String,
+      required: [true, "Correo es requerido!"],
+      trim: true,
     },
-    userId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: [true, "User is required!"],
+    contacto: {
+      type: String,
+      required: [true, "Número de contacto es requerido!"],
+      trim: true,
     },
-    state:{
-        type: String,
-        enum: ["Pending", "In process", "Completed", "Cancelled"],
-        default: "Pending",
+    vehiculo: {
+      type: String,
+      required: [true, "Marca y modelo del vehículo son requeridos!"],
+      trim: true,
     },
-    appointmentDate:{
-        type: Date,
-        required: true,
-        //Agregar validación currentDate < appointmentDate
-    }
-}, {
-    timestamps: true
-})
+    mensaje: {
+      type: String,
+      required: [true, "Mensaje es requerido!"],
+      trim: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const model = mongoose.model("Appointment", appointmentSchema);
 export const schema = model.schema;
