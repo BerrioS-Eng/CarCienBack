@@ -5,14 +5,16 @@ import { createAppointmentSchema } from "../middlewares/validators.js";
 export async function getAll(req, res) {
   try {
     const result = await Appointment.find({});
-    res
-      .status(200)
-      .json({ success: true, message: "Appointments retrieved", data: result });
+    res.status(200).json({
+      success: true,
+      message: "Citas recuperadas exitosamente",
+      data: result,
+    });
   } catch (error) {
     console.error(error);
     res
       .status(500)
-      .json({ success: false, message: "Error retrieving appointments" });
+      .json({ success: false, message: "Error al recuperar las citas" });
   }
 }
 
@@ -43,14 +45,14 @@ export async function create(req, res) {
     });
 
     const result = await newAppointment.save();
-    res
-      .status(201)
-      .json({ success: true, message: "Appointment created", data: result });
+    res.status(201).json({
+      success: true,
+      message: "Cita creada exitosamente",
+      data: result,
+    });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ success: false, message: "Error creating appointment" });
+    res.status(500).json({ success: false, message: "Error al crear la cita" });
   }
 }
 
@@ -63,19 +65,19 @@ export async function getOne(req, res) {
     if (!appointment) {
       return res
         .status(404)
-        .json({ success: false, message: "Appointment not found" });
+        .json({ success: false, message: "Cita no encontrada" });
     }
 
     res.status(200).json({
       success: true,
-      message: "Appointment retrieved",
+      message: "Cita recuperada exitosamente",
       data: appointment,
     });
   } catch (error) {
     console.error(error);
     res
       .status(500)
-      .json({ success: false, message: "Error retrieving appointment" });
+      .json({ success: false, message: "Error al recuperar la cita" });
   }
 }
 
@@ -101,9 +103,9 @@ export async function updateAppointment(req, res) {
     const appointment = await Appointment.findById(_id);
 
     if (!appointment) {
-      return res(404).json({
+      return res.status(404).json({
         success: false,
-        message: "Appointment not found",
+        message: "Cita no encontrada",
       });
     }
 
@@ -114,14 +116,16 @@ export async function updateAppointment(req, res) {
     appointment.mensaje = mensaje;
 
     const result = await appointment.save();
-    res
-      .status(200)
-      .json({ success: true, message: "Appointment updated", data: result });
+    res.status(200).json({
+      success: true,
+      message: "Cita actualizada exitosamente",
+      data: result,
+    });
   } catch (error) {
     console.error(error);
     res
       .status(500)
-      .json({ success: false, message: "Error updating appointment" });
+      .json({ success: false, message: "Error al actualizar la cita" });
   }
 }
 
@@ -134,15 +138,17 @@ export async function deleteAppointment(req, res) {
     if (!appointment) {
       return res
         .status(404)
-        .json({ success: false, message: "Appointment not found" });
+        .json({ success: false, message: "Cita no encontrada" });
     }
 
     await appointment.remove();
-    res.status(200).json({ success: true, message: "Appointment deleted" });
+    res
+      .status(200)
+      .json({ success: true, message: "Cita eliminada exitosamente" });
   } catch (error) {
     console.error(error);
     res
       .status(500)
-      .json({ success: false, message: "Error deleting appointment" });
+      .json({ success: false, message: "Error al eliminar la cita" });
   }
 }
